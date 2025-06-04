@@ -1,6 +1,7 @@
 return{
     {
         "hrsh7th/nvim-cmp",
+        commit = "b7b2c12",
         event = { "InsertEnter", "CmdlineEnter" },
         -- Rest of your plugin spec
         dependencies = {

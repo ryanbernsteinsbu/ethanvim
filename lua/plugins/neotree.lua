@@ -14,4 +14,27 @@ return {
         -- fill any relevant options here
 
     },
+    config = function()
+        require("neo-tree").setup({
+            source_selector = {
+                winbar = true,
+                statusline = false
+            },
+            window = {
+                width = 30,
+                mappings = {
+                    ["<leader>e"] = "close_window",
+                }
+            },
+            default_component_configs = {
+                indent = {
+                    with_expanders = true, -- this is what enables expanders (triangles)
+                    expander_collapsed = "▶",
+                    expander_expanded = "▼",
+                    expander_highlight = "NeoTreeExpander",
+                },
+            },
+        })
+        vim.keymap.set("n", "<leader>e", ":Neotree<CR>")
+    end
 }

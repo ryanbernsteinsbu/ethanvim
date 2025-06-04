@@ -137,8 +137,9 @@ return {
 			"    ░    ░       ░  ░░ ░  ░   ▒      ░   ░ ░ ",
 			"    ░  ░         ░  ░  ░      ░  ░         ░ ",
 		},
-    }lpha_bufnr = nil
+    }
 
+    local alpha_bufnr = nil
     local current = 1
     local total = #frames
     local delay_ms = 200   -- milliseconds between frames
@@ -146,11 +147,12 @@ return {
     dashboard.section.header.val = frames[1]
 
     dashboard.section.buttons.val = {
-      dashboard.button("e", "  > New file", ":ene <BAR> startinsert <CR>"),
-      dashboard.button("f", "  > Find file", ":FzfLua files<CR>"),
-      dashboard.button("r", "  > Recent", ":FzfLua oldfiles<CR>"),
-      dashboard.button("s", "  > Settings", ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
-      dashboard.button("q", "  > Quit NVIM", ":qa<CR>"),
+      dashboard.button("e", "   New file", ":ene <BARstartinsert <CR>"),
+      dashboard.button("f", "  Find file", ":FzfLua files<CR>"),
+      dashboard.button("g", "  Ripgrep", ":FzfLua live_grep_native<CR>"),
+      dashboard.button("r", "  Recent", ":FzfLua oldfiles<CR>"),
+      dashboard.button("s", "  Settings", ":e $MYVIMRC | :cd %:p:h | split . | wincmd k | pwd<CR>"),
+      dashboard.button("q", "  Quit NVIM", ":qa<CR>"),
     }
 
     alpha.setup(dashboard.opts)
@@ -161,20 +163,18 @@ return {
     alpha_bufnr = vim.fn.bufnr("%")
     
     local function animate_header()
-        -- cycle to next frame (wrap around)
         if
             alpha_bufnr
             and vim.api.nvim_buf_is_valid(alpha_bufnr)
-            and next(vim.fn.getbufinfo{bufnr = alpha_bufnr, listed = 1}[1].windows)  -- non-empty list means it’s on-screen
+            and next(vim.fn.getbufinfo{bufnr = alpha_bufnr, listed = 1}[1].windows)
             and current < total
         then
             current = (current >= total) and current or current + 1
             dashboard.section.header.val = frames[current]
-            alpha.redraw()                          -- tell alpha.nvim to refresh
-            vim.defer_fn(animate_header, delay_ms)  -- schedule next update
+            alpha.redraw()
+            vim.defer_fn(animate_header, delay_ms)  
         end
     end
-    -- 7) Kick off the animation after the screen is first rendered:
     vim.defer_fn(animate_header, delay_ms)
   end,
 }

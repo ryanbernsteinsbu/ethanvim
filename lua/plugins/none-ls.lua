@@ -1,6 +1,6 @@
 return {
     "jay-babu/mason-null-ls.nvim",
-    event = { "BufReadPre", "BufNewFile" },
+    event = { "InsertEnter", "CmdlineEnter" },
     opts = {
         automatic_setup = true,
         automatic_installation = true,

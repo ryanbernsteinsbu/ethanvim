@@ -147,7 +147,7 @@ return {
     dashboard.section.header.val = frames[1]
 
     dashboard.section.buttons.val = {
-      dashboard.button("e", "  New file", ":ene <BARstartinsert <CR>"),
+      dashboard.button("e", "  New file", ":ene <BAR> startinsert <CR>"),
       dashboard.button("f", "  Find file", ":FzfLua files<CR>"),
       dashboard.button("g", "  Ripgrep", ":FzfLua live_grep_native<CR>"),
       dashboard.button("r", "  Recent", ":FzfLua oldfiles<CR>"),

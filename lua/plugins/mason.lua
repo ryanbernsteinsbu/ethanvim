@@ -44,9 +44,6 @@ return {
 
 		local config = {
 			virtual_text = false, -- disable virtual text
-			signs = {
-				active = signs, -- show signs
-			},
 			--text = { [vim.diagnostic.severity.ERROR] = 'P'}
 			signs = { text = text_arr },
 			update_in_insert = true,
@@ -101,40 +98,50 @@ return {
                 lsp_bufmaps()
             end
         })
+        require("mason").setup()
 		require("mason-lspconfig").setup({
+        automatic_enable = true,
 			ensure_installed = {
 				"pyright",
 				"lua_ls",
 				"clangd",
 				"jsonls",
 			},
-			handlers = {
-				function(server_name)
-					require("lspconfig")[server_name].setup({
-						capabilities = capabilities,
-					})
-				end,
-				lua_ls = function()
-					require("lspconfig").lua_ls.setup({
-						capabilities = capabilities,
-						settings = {
-							Lua = {
-								runtime = {
-									version = "LuaJIT",
-								},
-								diagnostics = {
-									globals = { "vim", "love" },
-								},
-								workspace = {
-									library = {
-										vim.env.VIMRUNTIME,
-									},
-								},
-							},
-						},
-					})
-				end,
-			},
 		})
+        local lspconfig = require("lspconfig")
+        vim.lsp.config('lua_ls', {
+            capabilities = capabilities,
+            settings = {
+                Lua = {
+                    runtime = {
+                        version = "LuaJIT",
+                    },
+                    diagnostics = {
+                        globals = { "vim", "love" },
+                    },
+                    workspace = {
+                        checkThirdParty = false,
+                        library = vim.api.nvim_get_runtime_file("", true),
+                    },
+                },
+            },
+        })
+
+        vim.lsp.config('clangd', {
+            capabilities = capabilities,
+            cmd = {
+                "clangd",
+                "--query-driver=/usr/bin/g++",
+            },
+
+        })
+
+        vim.lsp.config('pyright', {
+            capabilities = capabilities,
+        })
+
+        vim.lsp.config('jsonls', {
+            capabilities = capabilities,
+        })
 	end,
 }
